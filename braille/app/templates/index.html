@@ -1,0 +1,516 @@
+{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>Braille Translator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/static/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="/static/assets/css/templatemo-space-dynamic.css">
+    <link rel="stylesheet" href="/static/assets/css/animated.css">
+    <link rel="stylesheet" href="/static/assets/css/owl.css">
+
+    <style>
+     .intersection {
+        margin: auto;
+        position: relative;
+        width: 600px;
+        height: 500px;
+        background-color: #606060;
+      }
+
+      .road {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #404040 49%, #ffffff 50%, #404040 51%);
+        z-index: 1;
+      }
+
+      .road:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #ffffff;
+        transform: translateY(-50%);
+      }
+
+      .signal {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 70px;
+        height: 210px;
+        background-color: black;
+        border-radius: 10px;
+        z-index: 2;
+      }
+
+      .signal button {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .signal button:hover {
+        background-color: #2980b9;
+      }
+
+      .signal .light {
+        width: 30px !important;
+        height: 50px !important;
+        margin: 5px 0;
+        border-radius: 50%;
+        background-color: gray;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+        .signal .light.off {
+          background-color: gray;
+        }
+
+        .signal .light.red {
+          background-color: red;
+        }
+
+        .signal .light.yellow {
+          background-color: yellow;
+        }
+
+        .signal .light.green {
+          background-color: green;
+        }
+
+      .signal.top {
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .signal.bottom {
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .signal.left {
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .signal.right {
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .processing-btn {
+        padding: 10px 20px;
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .processing-btn:hover {
+        background-color: #c0392b;
+      }
+
+      .div-btn {
+        margin: auto;
+        text-align: center;
+        margin-top: 25px;
+      }
+
+      .upload-image {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+      }
+
+      /* Style the custom label */
+      .custom-file-input label {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #e74c3c;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      /* Add hover effect to the label */
+      .custom-file-input label:hover {
+        background-color: #2980b9;
+      }
+    </style>
+  </head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="/index/" class="logo">
+              <h4>Braille<span>Translator</span></h4>
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+              <li class="scroll-to-section"><a href="#about">About Us</a></li>
+              <li class="scroll-to-section"><a href="#services">Services</a></li>
+              <li class="scroll-to-section"><a href="/">Logout</a></li>
+            </ul>        
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6 align-self-center">
+              <div class="left-content header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                <h6>Welcome to Braille Translator</h6>
+                <!-- <h2>We Manage <em>Traffic Flow</em> &amp; <span>Safety</span> Signals</h2> -->
+
+                <p>This innovative tool allows users to upload images of Braille text and converts it into readable English sentences. Using advanced Optical Braille Recognition (OBR), the tool accurately detects raised dot patterns from the image and translates them into English with precision. Ideal for enhancing accessibility and bridging communication gaps, the translator empowers individuals to interact with Braille text effortlessly. Whether it’s a single line or a detailed paragraph, the system ensures clarity and ease of use for all.</p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                <img src="/static/assets/images/logo.jpg" alt="team meeting">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="border: 1px solid black; margin-top: 10px; padding: 10px;">
+    <div style="text-align: center;">
+      <h3>Braille Translator</h3>
+    </div>
+    
+    <div class="custom-file-input" style="text-align: center; margin-top: 10px;">
+      <input type="file" id="selFile5" class="upload-image">
+      <label for="selFile5">Upload Image</label>
+    </div>
+
+    <div class="div-btn">
+      <button class="processing-btn" id="analyzeImage5">Translate</button>
+    </div>
+
+    <div class="div-btn" id="audioDiv">
+      
+    </div>
+
+    <div style="text-align: center; margin-top: 10px;" id="generateTranslate">
+    </div>
+  </div>
+
+  <div id="about" class="about-us section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="left-image wow fadeIn" data-wow-duration="1s" data-wow-delay="0.2s">
+            <img src="/static/assets/images/s1.png" alt="Traffic Signal Graphic">
+          </div>
+        </div>
+        <div class="col-lg-8 align-self-center">
+          <div class="services">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="item wow fadeIn" data-wow-duration="1s" data-wow-delay="0.5s">
+                  <div class="icon">
+                    <img src="/static/assets/images/s2.png" alt="Stop Sign">
+                  </div>
+                  <div class="right-text">
+                    <h4>Purpose</h4>
+                    <p>Braille translators convert Braille into readable text, enabling communication between visually impaired and sighted individuals.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="item wow fadeIn" data-wow-duration="1s" data-wow-delay="0.7s">
+                  <div class="icon">
+                    <img src="/static/assets/images/s3.jpg" alt="Speed Limit">
+                  </div>
+                  <div class="right-text">
+                    <h4>Types</h4>
+                    <p>They include software tools, physical devices, and online platforms for translating Braille to text.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="item wow fadeIn" data-wow-duration="1s" data-wow-delay="0.9s">
+                  <div class="icon">
+                    <img src="/static/assets/images/s4.jpg" alt="Seatbelt">
+                  </div>
+                  <div class="right-text">
+                    <h4>Mechanism</h4>
+                    <p>Using OCR they analyze Braille dot patterns in images and map them to corresponding characters.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="item wow fadeIn" data-wow-duration="1s" data-wow-delay="1.1s">
+                  <div class="icon">
+                    <img src="/static/assets/images/s5.png" alt="Pedestrian">
+                  </div>
+                  <div class="right-text">
+                    <h4>Applications</h4>
+                    <p>Used in education, accessibility, document digitization, and assistive technologies for communication.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <div id="services" class="our-services section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 align-self-center wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.2s">
+          <div class="left-image">
+            <img src="/static/assets/images/s6.png" alt="Traffic Signal">
+          </div>
+        </div>
+        <div class="col-lg-6 wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.2s">
+          <div class="section-heading">
+            <h2>Improve <em>Braille Text Converter</em></span></h2>
+            <p>A Braille Text Converter to English Text Tool is a utility designed to facilitate the conversion of Braille-encoded text into readable English text. It serves as a bridge between the visually impaired community and individuals who do not read Braille, promoting inclusivity and accessibility.</p>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="first-bar progress-skill-bar">
+                <h4>Equal learning opportunities.</h4>
+                <span>84%</span>
+                <div class="filled-bar"></div>
+                <div class="full-bar"></div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="second-bar progress-skill-bar">
+                <h4>Enhanced understanding of road safety concepts.</h4>
+                <span>99%</span>
+                <div class="filled-bar"></div>
+                <div class="full-bar"></div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="third-bar progress-skill-bar">
+                <h4>Greater independence for visually impaired individuals.</h4>
+                <span>100%</span>
+                <div class="filled-bar"></div>
+                <div class="full-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="portfolio" class="our-portfolio section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+          <div class="section-heading wow bounceIn" data-wow-duration="1s" data-wow-delay="0.2s">
+            <h2>Learn About <em>Braille Converters</em> &amp; How They <span>Ensure Accessibility</span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Traffic Light Awareness -->
+        <div class="col-lg-3 col-sm-6">
+          <a href="#">
+            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+              <div class="hidden-content">
+                <h4>Understanding Braille Converters</h4>
+                <p>Braille converters are innovative tools that transform Braille text into readable English or other languages.</p>
+              </div>
+              <div class="showed-content">
+                <img src="/static/assets/images/t1.jpg" alt="Traffic Light Awareness">
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- Pedestrian Crossing -->
+        <div class="col-lg-3 col-sm-6">
+          <a href="#">
+            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.4s">
+              <div class="hidden-content">
+                <h4>How Braille Converters Work</h4>
+                <p>Learn about the importance of pedestrian signals and crosswalk safety rules.</p>
+              </div>
+              <div class="showed-content">
+                <img src="/static/assets/images/t2.jpg" alt="Pedestrian Crossing">
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- Speed Limit Signs -->
+        <div class="col-lg-3 col-sm-6">
+          <a href="#">
+            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.5s">
+              <div class="hidden-content">
+                <h4>Applications of Braille Converters</h4>
+                <p>From education to employment, Braille converters enable visually impaired individuals to share their knowledge and access information. </p>
+              </div>
+              <div class="showed-content">
+                <img src="/static/assets/images/t3.png" alt="Speed Limit Signs">
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- Road Safety Education -->
+        <div class="col-lg-3 col-sm-6">
+          <a href="#">
+            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+              <div class="hidden-content">
+                <h4>The Importance of Accessibility Tools</h4>
+                <p>Braille converters promote accessibility and equal opportunities by making information accessible to everyone.</p>
+              </div>
+              <div class="showed-content">
+                <img src="/static/assets/images/t5.jpg" alt="Road Safety Education">
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="contact" class="contact-us section">
+    <div class="container">
+      <div class="row">
+        <!-- Traffic Signal Information Section -->
+        <div class="col-lg-12 align-self-center wow fadeInLeft" data-wow-duration="0.5s" data-wow-delay="0.25s">
+          <div class="section-heading">
+            <h2>Get in Touch About Braille to English Conversion</h2>
+            <p>If you have questions about Braille translation, accessibility tools, or inclusive communication, feel free to reach out to us. Together, we can break barriers and build a more connected world!</p>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.25s">
+          <p>© Copyright 2024 Braille Converter</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Scripts -->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/assets/js/owl-carousel.js"></script>
+  <script src="/static/assets/js/animation.js"></script>
+  <script src="/static/assets/js/imagesloaded.js"></script>
+  <script src="/static/assets/js/templatemo-custom.js"></script>
+
+  <script>
+
+            $("#analyzeImage5").click(function() {
+
+              if ($("#selFile5").val() === "") {
+                  alert("Please Select Image");
+                  return false;
+              }
+                $("#analyzeImage5").html('Analyzing <div class="spinner-border text-warning" role="status" style="height: 20px; width: 20px;"><span class= "visually-hidden" > Loading...</span ></div >');
+                let formData = new FormData();
+                formData.append("csrfmiddlewaretoken", $('input[name=csrfmiddlewaretoken]').val());
+                formData.append("selFile5", $("#selFile5")[0].files[0]);
+
+                $.ajax({
+                    url: "/translate/",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                      $("#analyzeImage5").html('Translate');
+                      $("#generateTranslate").text(res.text);
+
+                      $("#audioDiv").empty();
+
+                      $("#audioDiv").html('<audio id="audio-player" controls><source id="audio-source" src="/static/output.mp3" type="audio/mpeg"></audio>');
+
+                      const audioSource = document.getElementById('audio-source');
+                      const audioPlayer = document.getElementById('audio-player');
+                      audioSource.src = res.audio_file_url;
+                    },
+                    error: function(res, error) {
+                        console.error(error);
+                    },
+
+                });
+              });
+    </script>
+
+</body>
+</html>

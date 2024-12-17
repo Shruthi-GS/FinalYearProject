@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f3f4f7, #a3bffa);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 350px;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .input-field {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field input:focus {
+            border-color: #4e73df;
+        }
+
+        .input-field label {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            font-size: 14px;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+
+        .input-field input:focus + label,
+        .input-field input:valid + label {
+            top: -10px;
+            left: 12px;
+            font-size: 12px;
+            color: #4e73df;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #4e73df;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #2e59d9;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #4e73df;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .social-login a {
+            display: inline-block;
+            padding: 10px;
+            font-size: 18px;
+            color: white;
+            background-color: #3b5998;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-login a:hover {
+            background-color: #2d4373;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="input-field">
+                <input type="text" id="txtMobileNo" maxlength="10" required>
+                <label for="txtMobileNo">Mobile Number</label>
+            </div>
+            <div class="input-field">
+                <input type="password" id="txtPassword" required>
+                <label for="txtPassword">Password</label>
+            </div>
+            <button type="button" class="login-btn" id="btn_submit">Log In</button>
+        </form>
+        <div class="register-link">
+            <p>Don't have an account? <a href="/register/">Register</a></p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btn_submit").click(function (e) {
+                if ($("#txtMobileNo").val().trim().length < 1) {
+                    alert("Please Enter Mobile No");
+                    $("#txtMobileNo").focus();
+                    return false;
+                }
+
+                if ($("#txtMobileNo").val().trim().length < 10) {
+                    alert("Please Enter Valid Mobile No");
+                    $("#txtMobileNo").focus();
+                    return false;
+                }
+
+                if ($("#txtPassword").val().trim().length < 1) {
+                    alert("Please Enter Password");
+                    $("#txtPassword").focus();
+                    return false;
+                }
+
+                let mobile = $("#txtMobileNo").val();
+                let password = $("#txtPassword").val();
+                let existingData = JSON.parse(localStorage.getItem('userData')) || [];
+                let isMobileExisting = existingData.some(data => data.mobile === mobile);
+                let isPasswordExisting = existingData.some(data => data.password === password);
+
+                if (!isMobileExisting) {
+                    alert("Invalid Mobile number OR Password");
+                    return false;
+                }
+
+                if (!isPasswordExisting) {
+                    alert("Invalid Password");
+                    return false;
+                }
+
+                localStorage.setItem('isLoggedIn', 'Y');
+                window.location = "/index/";
+            });
+        });
+    </script>
+</body>
+</html>
