@@ -22,6 +22,7 @@ METHODOLOGY:
 1- Image Pre-processing: Noise reduction using Gaussian blur, thresholding and erosion.
 
 Gaussian blur
+
 ![image](https://github.com/user-attachments/assets/09e63a47-2a64-4584-b91c-88d001616840)
 
 Erosion
@@ -34,6 +35,7 @@ Erosion
 2- Connected Component Labelling: Apply CCL to isolate Braille dots.
 
 3- Feature Extraction: Apply bounding box around each character.
+
 ![image](https://github.com/user-attachments/assets/d4d0b3de-0ac7-4194-bb27-5bd8de9f505f)
 
 4- Mapping and Conversion: Use of a JSON key for Braille-to-text translation.
